@@ -8,8 +8,10 @@ class TestBinFile(unittest.TestCase):
     tmpfile_ = None
 
     def setUp(self):
-        self.tempfile_ = tempfile.TemporaryFile(mode='w+b')
-        self.tempfile_.write(bytes([130, 104, 101, 0, 108, 108, 111, 32, 119, 111, 114, 108, 100, 0]))
+        self.tempfile_ = tempfile.TemporaryFile(mode="w+b")
+        self.tempfile_.write(
+            bytes([130, 104, 101, 0, 108, 108, 111, 32, 119, 111, 114, 108, 100, 0])
+        )
         self.tempfile_.seek(0)
 
     def tearDown(self):
@@ -123,17 +125,17 @@ class TestBinFile(unittest.TestCase):
     def test_ascii(self):
         b = binfile.BinFile(self.tempfile_)
         self.tempfile_.seek(4)
-        self.assertEqual(b.read_ascii(5), 'llo w')
+        self.assertEqual(b.read_ascii(5), "llo w")
         self.assertEqual(self.tempfile_.tell(), 9)
 
     def test_asciiz(self):
         b = binfile.BinFile(self.tempfile_)
         self.tempfile_.seek(1)
-        self.assertEqual(b.read_asciiz(), 'he')
+        self.assertEqual(b.read_asciiz(), "he")
         self.assertEqual(self.tempfile_.tell(), 4)
-        self.assertEqual(b.read_asciiz(), 'llo world')
+        self.assertEqual(b.read_asciiz(), "llo world")
         self.assertEqual(self.tempfile_.tell(), 14)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
