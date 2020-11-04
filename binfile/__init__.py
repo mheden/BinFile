@@ -18,6 +18,8 @@ class BinFile(object):
     }
 
     def __init__(self, fd, little=True):
+        if fd is None:
+            raise TypeError('BinFile expected a file object')
         self._fd = fd
         if little:
             self._endian = "<"
@@ -28,10 +30,14 @@ class BinFile(object):
         fmt = "%s%s" % (self._endian, type_)
         return struct.unpack(fmt, self._fd.read(length))[0]
 
-    def _write(self, type_, length, data):
+    def _write(self, type_, data):
         fmt = "%s%s" % (self._endian, type_)
-        print("_write(%d) => %s" % (data, struct.pack(fmt, data)))
+        print("DEBUG: _write(%d) => %s" % (data, struct.pack(fmt, data)))
         self._fd.write(struct.pack(fmt, data))
+
+    def skip(self, length):
+        pos = self._fd.tell()
+        self._fd.seek(pos + length)
 
     read_u8 = partialmethod(_read, *_conv["u8"])
     read_u16 = partialmethod(_read, *_conv["u16"])
@@ -44,21 +50,10 @@ class BinFile(object):
     read_float = partialmethod(_read, *_conv["float"])
     read_double = partialmethod(_read, *_conv["double"])
 
-    write_u8 = partialmethod(_write, *_conv["u8"])
-    write_u16 = partialmethod(_write, *_conv["u16"])
-    write_u32 = partialmethod(_write, *_conv["u32"])
-    write_u64 = partialmethod(_write, *_conv["u64"])
-    write_s8 = partialmethod(_write, *_conv["s8"])
-    write_s16 = partialmethod(_write, *_conv["s16"])
-    write_s32 = partialmethod(_write, *_conv["s32"])
-    write_s64 = partialmethod(_write, *_conv["s64"])
-    write_float = partialmethod(_write, *_conv["float"])
-    write_double = partialmethod(_write, *_conv["double"])
-
     def read_ascii(self, length):
         fmt = "%ds" % length
         s = struct.unpack(fmt, self._fd.read(length))[0]
-        s = s.partition(b"\0")[0]  # remove tailing NULL(s)
+        # s = s.partition(b"\0")[0]  # remove tailing NULL(s)
         return s.decode("ascii")
 
     def read_asciiz(self):
@@ -70,8 +65,21 @@ class BinFile(object):
             s += chr_
         return s.decode("ascii")
 
-    def read(self, length):
-        return self._fd.read(length)
+    write_u8 = partialmethod(_write, _conv["u8"][0])
+    write_u16 = partialmethod(_write, _conv["u16"][0])
+    write_u32 = partialmethod(_write, _conv["u32"][0])
+    write_u64 = partialmethod(_write, _conv["u64"][0])
+    write_s8 = partialmethod(_write, _conv["s8"][0])
+    write_s16 = partialmethod(_write, _conv["s16"][0])
+    write_s32 = partialmethod(_write, _conv["s32"][0])
+    write_s64 = partialmethod(_write, _conv["s64"][0])
+    write_float = partialmethod(_write, _conv["float"][0])
+    write_double = partialmethod(_write, _conv["double"][0])
 
-    def write(self, data):
-        return self._fd.write(data)
+    def write_ascii(self, s):
+        fmt = "%ds" % len(s)
+        self._fd.write(struct.pack(fmt, bytes(s.encode('ascii'))))
+
+    def write_asciiz(self, s):
+        self.write_ascii(s)
+        self.write_u8(0)
