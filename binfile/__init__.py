@@ -19,7 +19,7 @@ class BinFile(object):
 
     def __init__(self, fd, little=True):
         if fd is None:
-            raise TypeError('BinFile expected a file object')
+            raise TypeError("BinFile expected a file object")
         self._fd = fd
         if little:
             self._endian = "<"
@@ -32,7 +32,6 @@ class BinFile(object):
 
     def _write(self, type_, data):
         fmt = "%s%s" % (self._endian, type_)
-        print("DEBUG: _write(%d) => %s" % (data, struct.pack(fmt, data)))
         self._fd.write(struct.pack(fmt, data))
 
     def skip(self, length):
@@ -78,7 +77,7 @@ class BinFile(object):
 
     def write_ascii(self, s):
         fmt = "%ds" % len(s)
-        self._fd.write(struct.pack(fmt, bytes(s.encode('ascii'))))
+        self._fd.write(struct.pack(fmt, bytes(s.encode("ascii"))))
 
     def write_asciiz(self, s):
         self.write_ascii(s)

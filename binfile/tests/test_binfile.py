@@ -147,7 +147,7 @@ class TestRead(unittest.TestCase):
 
 class TestReadWrite(unittest.TestCase):
 
-    filename = '__test_mixed__.bin'
+    filename = "__test_mixed__.bin"
 
     def tearDown(self):
         with contextlib.suppress(FileNotFoundError):
@@ -155,7 +155,7 @@ class TestReadWrite(unittest.TestCase):
 
     def test_mixed(self):
         data = [77, 1234, -5648715644887832, "hello world", -5678]
-        with open(self.filename, mode='wb') as f:
+        with open(self.filename, mode="wb") as f:
             bf = binfile.BinFile(f)
             bf.write_u8(data[0])
             bf.write_u16(data[1])
@@ -163,7 +163,7 @@ class TestReadWrite(unittest.TestCase):
             bf.write_asciiz(data[3])
             bf.write_s16(data[4])
 
-        with open(self.filename, mode='rb') as f:
+        with open(self.filename, mode="rb") as f:
             bf = binfile.BinFile(f)
             self.assertEqual(bf.read_u8(), data[0])
             self.assertEqual(bf.read_u16(), data[1])
@@ -197,7 +197,6 @@ class TestSkip(unittest.TestCase):
 
 
 class TestException(unittest.TestCase):
-
     def test_exception(self):
         try:
             binfile.BinFile(None)
