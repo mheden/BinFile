@@ -17,6 +17,7 @@ Example
 -------
 
 .. code-block:: python
+
     from binfile import BinFile
 
     filename = 'file.bin'
