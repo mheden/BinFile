@@ -9,15 +9,15 @@ def readme():
 setup(
     name="binfile",
     version="0.9.0",
-    description="<TODO>",
+    description='A simple Python module for reading and writing "normal" datatypes'
+    + "(such as U8, S64, null terminated strings etc.) from or to a file.",
     long_description=readme(),
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: BSD License",
-        "Operating System :: OS Independent" "Topic :: Multimedia :: Graphics",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    keywords="Lindenmayer l-system lsystem",
+    keywords="binary file datatype lowlevel",
     url="http://github.com/mheden/BinFile",
     author="Mikael Heden",
     author_email="mikael@heden.net",
@@ -26,6 +26,4 @@ setup(
     install_requires=[],
     include_package_data=True,
     zip_safe=False,
-    test_suite='nose.collector',
-    tests_require=['nose'],
 )
